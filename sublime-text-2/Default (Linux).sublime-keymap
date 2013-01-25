@@ -1,0 +1,11 @@
+[
+	{ "keys": ["ctrl+alt+f"], "command": "show_panel", "args": {"panel": "replace"} },
+	{ "keys": ["ctrl+j"], "command": "next_view" },
+	{ "keys": ["ctrl+h"], "command": "prev_view" },
+	{ "keys": ["f"], "command": "fold", 
+		"context": [{"key": "setting.command_mode"}]
+	},
+	{ "keys": ["shift+F"], "command": "unfold", 
+		"context": [{"key": "setting.command_mode"}]
+	}
+]
