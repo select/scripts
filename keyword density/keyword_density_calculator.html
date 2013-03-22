@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<script language="JavaScript" type="text/javascript" src="jquery-1.9.1.min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="DataTables-1.9.4/media/js/jquery.dataTables.min.js"></script>
+		<link href="DataTables-1.9.4/media/css/jquery.dataTables.css" rel="stylesheet" type="text/css">
+		<script language="JavaScript" type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<style>
+		body {
+			margin-left: 15px;
+		}
+		.max {
+			color: red;
+			font-weight: 900;
+		}
+		.min {
+			color: green;
+			font-weight: 900;
+		}
+		</style>
+		<script>
+		$( document ).ready( function() {
+
+  			$('form').submit(function(event){
+  				event.preventDefault();
+				var minkeydensity = parseInt($('#minkeydensity').val()), 
+					maxkeydensity = parseInt($('#maxkeydensity').val()),
+					keyword_list = $('#keywords').val().split(" "),
+					word_list = $('#searchtext').val().split(" "),
+					nwords = word_list.length;
+					$('#result').html(nwords);
+				keyword_dict = {};
+				for (var i = 0, w; w = keyword_list[i]; i++) {
+					var w = w.replace(/\W/g,'');
+					keyword_dict[w] = 0;
+				}
+				for (var i = 0, w; w = word_list[i]; i++) {
+					var w = w.replace(/\W/g,'');
+					for(var keyword in keyword_dict){
+						if (keyword == w){
+							keyword_dict[w] += 1;
+						}
+					}
+				}
+				items = '<thead><th>keyword</th><th>occurance</th><th>percent of text</th></thead>';
+				for (keyword in keyword_dict){
+					var occ = keyword_dict[keyword]*100/nwords;
+					var c=''
+					if(occ>maxkeydensity){
+						c='max'
+					}else if (occ<minkeydensity){
+						c='min';
+					}
+					items += '<tr class="'+c+'"><td>'+keyword+'</td><td>'+keyword_dict[keyword]+'</td><td>'+occ.toPrecision(2)+'</td></tr>';
+
+				}
+				console.log(keyword_dict);
+				$('#result').append('<table>'+items+'<table>');
+				$('#result table').dataTable();
+
+			});
+		});
+		</script>
+	</head>
+	<body>
+		<h1>Keyword Density Calculator</h1>
+		<form>
+			<label>Keywords </label>
+			<input type="text" id="keywords" placeholder="plattenspieler, partybeleuchtung, ...">
+			<label>Min Deinsity</label>
+			<input type="text" id="minkeydensity" value="2">
+			<label>Max Density</label>
+			<input type="text" id="maxkeydensity" value="6">
+			<label>Text</label>
+			<textarea rows="4" cols="50" id="searchtext"></textarea><br>
+			<button class="btn btn-success" id="go"><i class="icon-ok icon-white"></i></button>
+		</form>
+		<dev id="result">
+			
+		</dev>
+	</body>
+</html>
