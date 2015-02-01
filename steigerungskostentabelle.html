@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Steigerungskostentabelle</title>
+<meta charset="utf-8"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>    
 <script type="text/javascript">
 $( document ).ready(function() {
@@ -68,6 +69,7 @@ table th {
     background-color: #eee;
     cursor: pointer;
     text-align: left;
+    min-width: 50px;
     }
 table td {
     /*border-left: solid 1px;*/
@@ -117,15 +119,18 @@ tr.red .green {
 </style>
 </head>
 <body>
-<table class="wikitable" width="100%">
+
 <div class="topright">
-<button type="" class="reset">reset</button>
     <span class="rangesum"></span>
     <span class="calculator"> </span>
+    <button type="reset" class="reset">reset</button>
 </div>
+
 <div class="spacer"></div>
+
+<table class="wikitable">
 <tbody><tr class="vordergrund letters" >
-<th width="100px">Wert</th>
+<th>Wert</th>
 <th>A*</th>
 <th>A</th>
 <th>B</th>
