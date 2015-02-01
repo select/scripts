@@ -56,12 +56,29 @@ $( document ).ready(function() {
     });
 });
 </script>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <style type="text/css" media="screen">
-
-table th {background-color: #eee}
-table td {border: solid 1px;}
-.red {
-    background-color: red;
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+table {
+    border-collapse: collapse;
+}
+table th {
+    background-color: #eee;
+    cursor: pointer;
+    text-align: left;
+    }
+table td {
+    /*border-left: solid 1px;*/
+    padding: 5;
+    margin: 0;
+}
+tbody tr:nth-child(odd) {
+   background-color: #eee;
+}
+tr.red {
+    background-color: red!important;
 }
 .green {
     background-color: green;
