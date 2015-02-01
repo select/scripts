@@ -12,7 +12,8 @@ $( document ).ready(function() {
     function sortNumber(a,b) {
         return a - b;
     }
-    $('table th').on('click', function(){
+    $('table th').on('click', function(e){
+        e.stopPropagation();
         // Handler for .ready() called.
         if( $(this).parent().hasClass('letters')){
             var col_index = $(this).prevAll().length;  
