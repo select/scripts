@@ -5,7 +5,10 @@
 <meta charset="utf-8"/>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>    
 <script type="text/javascript">
+var flag = false;
 $( document ).ready(function() {
+    if (flag == true) return;
+    flag = true;
     var rows = $('table tr'); 
     var $last_el = undefined;
     var row_max, row_min, col
