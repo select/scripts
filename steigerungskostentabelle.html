@@ -20,7 +20,7 @@ $( document ).ready(function() {
             rows.find(':nth-child(' + (col_index + 1) + ')').addClass('green');
         }else{
             if($('.red').length<2){
-                $(this).parent().toggleClass('red');
+                $(this).parent().addClass('red');
             }else{
                 $last_el.removeClass('red');
                 $(this).parent().toggleClass('red');
