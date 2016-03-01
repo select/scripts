@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Mathe 🌟</title>
+  <link rel="stylesheet" href="">
+  <style type="text/css" media="screen">
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300);
+    body {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 24px;
+      padding: 0 14px;
+
+    }
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+     font-weight: 300;
+    }
+    .tab__head {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 14px;
+    }
+    .tab__head li {
+      float: left;
+      width: 200px;
+      text-align: center;
+      padding: 7px 0;
+      cursor: pointer;
+    }
+    .tab__head li.active {
+      background-color: #2ecc71!important;
+      color: #fff;
+    }
+    .tab__head li:hover {
+      background-color: #eee;
+    }
+    .tab__body {
+      padding-top: 46px;
+      clear: both;
+      display: block;
+      font-size: 48px;
+    }
+    .start {
+      width: 200px;
+      padding: 7px 0;
+      font-size: 24px;
+      color: white;
+      text-align: center;
+      background: #e67e22;
+      border: 0;
+      cursor: pointer;
+      box-shadow: 6px 6px 1px #C3C3C3;
+    }
+    .tab__body span {
+      margin: 0 28px;
+    }
+    .tab__body span:first-child {
+      margin-left: 0;
+    }
+    .tab__body span:last-child {
+      margin-right: 0;
+    }
+    .lost {
+      color: red;
+    }
+    .stop{
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      border: 1px solid red;
+      color: red;
+      font-size: 24px;
+      width: 200px;
+      padding: 7px 0;
+      background-color: transparent;
+      cursor: pointer;
+    }
+    .problem {
+      display: flex;
+    }
+    .input-block {
+      text-align: center;
+      display: inline-block;
+    }
+    .input-block input {
+      font-size: 48px;
+      padding: 8px 14px;
+      border: 1px solid #EFEFEF;
+      width: 80px;
+    }
+    .keys {
+      width: 200px;
+    }
+    .keys div {
+      cursor: pointer;
+      border: 1px solid #EFEFEF;
+      color: #aaa;
+      width: 50px;
+      height: 50px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin: 3px;
+      border-radius: 3px;
+    }
+    .keys div.clear {
+      border-color: red;
+      color: red;
+      opacity: 0.4;
+    }
+    .keys div.submit {
+      color: #2ecc71;
+      border-color: #2ecc71;
+    }
+    .keys div.spacer {
+      cursor: default;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Mathe 🌟</h1>
+    <button class="stop" hidden>✖ Stop</button>
+    <ul class="tab__head">
+      <li data-tab="add" class="active">Addieren</li>
+      <li data-tab="sub">Subtrahieren</li>
+      <li data-tab="multi">Kleines 1 x 1</li>
+    </ul>
+    <div class="tab__body add">
+      <div class="result"></div>
+      <form hidden>
+        <div class="problem">
+          <span class='a'>?</span> <span class="operator">+</span> <span class='b'>?</span> <sapn class="equal">=</sapn>
+          <div class="input-block">
+            <input type="text" class="input" placeholder="?" autofocus>
+            <div class="keys">
+              <div class="clear">✖</div>
+              <div class="spacer"></div>
+              <div class="submit">✔</div>
+              <div>1</div>
+              <div>2</div>
+              <div>3</div>
+              <div>4</div>
+              <div>5</div>
+              <div>6</div>
+              <div>7</div>
+              <div>8</div>
+              <div>9</div>
+              <div>0</div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="lost">୧| ✖ ﹏ ✖ |୨</div>
+      <button class="start">Start ➤</button>
+    </div>
+  </main>
+<script type="text/javascript">
+'use strict';
+var operatorMap = {add: '+', sub: '-', multi: '*'};
+var nums = [];
+var count = 0;
+var rounds = 5;
+var mode = 'add';
+var startTime;
+var $form = document.querySelector('form')
+var $start = document.querySelector('.start')
+var $lost = document.querySelector('.lost');
+var $equal = document.querySelector('.equal');
+var $operator = document.querySelector('.operator');
+var $a = document.querySelector('.a')
+var $b = document.querySelector('.b')
+var $input = document.querySelector('.input');
+var $result = document.querySelector('.result');
+var $stop = document.querySelector('.stop');
+var $tabhead = document.querySelector('.tab__head');
+
+$form.hidden = true;
+$lost.hidden = true;
+
+$start.addEventListener('click', function(){
+  var mode = document.querySelector('li.active').dataset.tab
+  challange(mode);
+});
+$stop.addEventListener('click', function(){
+  finish();
+  $form.hidden = true;
+  $start.innerHTML = 'Start ➤'
+});
+
+var keys = document.querySelectorAll('.keys div');
+for (var i = keys.length - 1; i >= 0; i--) {
+  keys[i].addEventListener('click', function(){
+    if(this.innerHTML === '✔'){
+      submitResult();
+    }else if (this.innerHTML === '✖'){
+       $input.value = '';
+    } else{
+        $input.value += this.innerHTML;
+    }
+  });
+}
+
+var tabs = document.querySelectorAll('.tab__head li');
+[].forEach.call(tabs, function(tab){
+  tab.addEventListener('click', function(){
+    [].forEach.call(tabs,function(t){
+      t.setAttribute('class', '');
+    });
+    mode = tab.dataset.tab;
+    tab.setAttribute('class', 'active');
+  });
+});
+
+var getRandomInt = function(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var finish = function(){
+  $start.innerHTML = 'Noch mal ➤';
+  $start.hidden = false;
+  $tabhead.style.opacity = '';
+  $tabhead.style.pointerEvents = "";
+  document.querySelector('h1').style.opacity = '';
+  count = 0;
+  $stop.hidden = true;
+}
+
+var initRound = function(mode){
+  var a=getRandomInt(1,9);
+  var b=getRandomInt(1,9);
+  if(mode === 'multi'){
+    a=getRandomInt(2,9);
+    b=getRandomInt(2,9);
+  }
+  $a.innerHTML = a;
+  $b.innerHTML = b;
+  return [a,b];
+}
+
+var submitResult = function(event){
+  if(event) event.preventDefault();
+  if(!$input.value) {
+    return;
+  } else {
+    var res;
+    if(mode == 'add') {
+      res = nums[0]+nums[1];
+    } else if(mode == 'multi') {
+      res = nums[0]*nums[1]
+    } else if(mode === 'sub') {
+      res = nums[0]-nums[1]
+    }
+    if(res != parseInt($input.value)){
+      $lost.hidden = false;
+      $equal.innerHTML = '≠';
+      finish()
+    }else{
+      $input.value = '';
+      if(count<rounds) {
+        ++count;
+        nums = initRound(mode);
+      } else {
+        $form.hidden = true;
+        var endTime = new Date();
+        var score = 1100 - parseInt((endTime - startTime)/100);
+        if(score<0) score = 0;
+        $result.innerHTML = 'Du hast ' + score + ' Punkte';
+        $result.hidden = false;
+        finish();
+      }
+    }
+  }
+};
+
+var challange = function(mode){
+  startTime = new Date();
+
+  $form.hidden = false;
+
+  var re = /[^0-9-]+/g
+  $input.addEventListener('keyup', function(event){
+    if(re.test($input.value)){
+      $input.value = $input.value.replace(re, '');
+    }
+  })
+
+  $operator.innerHTML = operatorMap[mode];
+  $start.hidden = true;
+  $result.hidden = true;
+  $lost.hidden = true;
+  $input.value = '';
+  $input.focus();
+  $equal.innerHTML = '=';
+  $stop.hidden = false;
+  $tabhead.style.opacity = 0.1
+  $tabhead.style.pointerEvents = "none";
+  document.querySelector('h1').style.opacity = 0.1
+  nums = initRound(mode);
+
+  count = 0;
+
+  $form.addEventListener('submit', submitResult);
+}
+
+</script>
+</body>
+</html>
